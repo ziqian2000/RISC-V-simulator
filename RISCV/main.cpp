@@ -12,8 +12,6 @@ unsigned x[32], pc; // user-visible registers
 
 int main()
 {
-	freopen("sample.data", "r", stdin);
-
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();
