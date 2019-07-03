@@ -3,8 +3,8 @@ PROGRAM = code
 CXX = g++
 CXXFLAGS = -g -std=c++17
 
-CPP_FILES = $(wildcard code/*.cpp)
-H_FILES = $(wildcard code/*.h)
+CPP_FILES = $(wildcard RISCV/*.cpp)
+H_FILES = $(wildcard RISCV/*.h)
 
 LDOPTIONS = -L.
 
