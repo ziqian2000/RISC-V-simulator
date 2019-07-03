@@ -12,7 +12,7 @@ unsigned x[32], pc; // user-visible registers
 
 int main()
 {
-	freopen("sample/array_test1.data", "r", stdin);
+	//freopen("sample/array_test1.data", "r", stdin);
 
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
