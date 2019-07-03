@@ -52,7 +52,6 @@ public:
 			}
 			break;
 		case 0b0000011: // ...
-
 			switch (func3)
 			{
 			case 0b000: // LB

@@ -34,13 +34,13 @@ public:
 				rs1 = int(rs1) < int(rs2) ? 1 : 0;
 				break;
 			case 0b101: // BGE
-				rs1 = int(rs1) > int(rs2) ? 1 : 0;
+				rs1 = int(rs1) >= int(rs2) ? 1 : 0;
 				break;
 			case 0b110: // BLTU
 				rs1 = rs1 < rs2 ? 1 : 0;
 				break;
 			case 0b111: // BGEU
-				rs1 = rs1 > rs2 ? 1 : 0;
+				rs1 = rs1 >= rs2 ? 1 : 0;
 				break;
 			}
 			break;
