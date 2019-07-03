@@ -21,6 +21,7 @@ public:
 			(imm >>= 1) <<= 1;
 			break;
 		case 0b1100011: // ...
+			imm -= 4;
 			switch (func3)
 			{
 			case 0b000: // BEQ
@@ -93,16 +94,16 @@ public:
 				rs1 = rs1 & imm;
 				break;
 			case 0b001: // SLLI
-				rs1 <<= imm;
+				rs1 <<= (imm & ((1 << 5) - 1));
 				break;
 			case 0b101: // ...
 				switch (func7)
 				{
 				case 0b0000000: // SRLI
-					rs1 >>= imm;
+					rs1 >>= (imm & ((1 << 5) - 1));
 					break;
 				case 0b0100000: // SRAI
-					rs1 = int(rs1) >> imm;
+					rs1 = int(rs1) >> (imm & ((1 << 5) - 1));
 					break;
 				}
 				break;

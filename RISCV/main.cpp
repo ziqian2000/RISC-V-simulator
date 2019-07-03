@@ -12,6 +12,8 @@ unsigned x[32], pc; // user-visible registers
 
 int main()
 {
+	freopen("sample/array_test1.data", "r", stdin);
+
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();
@@ -20,6 +22,7 @@ int main()
 	pipeline5 *ppl5 = new pipeline5();
 	while (true)
 	{
+		//printf("%x\n", pc);
 		//printf("0 : %d %d %d %d %d\n", ppl1->empty, ppl2->empty, ppl3->empty, ppl4->empty, ppl5->empty);
 		ppl1->run(ppl2);
 		//printf("1 : %d %d %d %d %d\n", ppl1->empty, ppl2->empty, ppl3->empty, ppl4->empty, ppl5->empty);

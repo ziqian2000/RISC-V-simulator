@@ -35,15 +35,7 @@ public:
 			type = S;
 			break;
 		case 19: // 0010011
-			switch (func3)
-			{
-			case 1: case 5: // 001, 101
-				type = R;
-				break;
-			default:
-				type = I;
-				break;
-			}
+			type = I;
 			break;
 		case 51: // 0110011
 			type = R;
