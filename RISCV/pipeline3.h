@@ -19,7 +19,7 @@ public:
 			imm -= 4;
 			break;
 		case 0b1100111: // JALR
-			imm += rs1 - 4;
+			imm += rs1;
 			(imm >>= 1) <<= 1;
 			break;
 		case 0b1100011: // ...

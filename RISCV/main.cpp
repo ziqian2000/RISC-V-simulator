@@ -20,7 +20,7 @@ unsigned branch_tot_vis, branch_cor_vis; // the number of times branches are vis
 
 int main()
 {
-	//freopen("sample/basicopt1.data", "r", stdin);
+	freopen("sample/basicopt1.data", "r", stdin);
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();

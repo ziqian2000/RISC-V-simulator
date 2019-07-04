@@ -13,7 +13,6 @@ public:
 		{
 			printf("%d\n", ((unsigned)x[10]) & 255u);
 			//printf("%lf\n", 1.0 * branch_cor_vis / branch_tot_vis);
-			//for (;;);
 			exit(0);
 		}
 		switch (opcode)
@@ -24,11 +23,11 @@ public:
 			imm += pc;
 			break;
 		case 0b1101111: // JAL
-			rs1 = pc + 4;
+			rs1 = pc;
 			pc += imm;
 			break;
 		case 0b1100111: // JALR
-			rs1 = pc + 4;
+			rs1 = pc;
 			pc = imm;
 			break;
 		case 0b1100011: // ...
