@@ -161,7 +161,7 @@ public:
 	{
 		if (!is_empty(next_ppl) || is_empty(this)) return;
 		execute();
-		//unlock_pc(); // hazard : unlock pc
+		unlock_pc(); // hazard : unlock pc
 		pass(next_ppl);
 	}
 };

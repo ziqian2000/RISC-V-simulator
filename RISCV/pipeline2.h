@@ -156,8 +156,8 @@ public:
 		decode_all();
 		sign_extend();
 		if (!register_fetch()) { return; } // hazard : unable to fetch the locked registers
-		//lock_register(); // hazard : lock the rd register
-		//lock_pc(); // hazard : lock pc
+		lock_register(); // hazard : lock the rd register
+		lock_pc(); // hazard : lock pc
 		pass(next_ppl);
 	}
 };
