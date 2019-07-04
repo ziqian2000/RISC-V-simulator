@@ -2,7 +2,7 @@
 #include "tools.h"
 #include "pipeline.h"
 
-extern unsigned x[], locked[];
+extern unsigned x[], locked[], pc_lock;
 
 class pipeline2 : public pipeline
 {
