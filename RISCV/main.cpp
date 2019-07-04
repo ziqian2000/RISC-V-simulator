@@ -14,7 +14,7 @@ unsigned locked[32], pc_lock; // deal with hazard
 
 int main()
 {
-	freopen("sample/basicopt1.data", "r", stdin);
+	//freopen("sample/basicopt1.data", "r", stdin);
 
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
