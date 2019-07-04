@@ -12,7 +12,7 @@ public:
 		if (ins == 0x00c68223)
 		{
 			printf("%d\n", ((unsigned)x[10]) & 255u);
-			printf("%lf\n", 1.0 * branch_cor_vis / branch_tot_vis);
+			//printf("%lf\n", 1.0 * branch_cor_vis / branch_tot_vis);
 			//for (;;);
 			exit(0);
 		}
