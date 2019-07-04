@@ -1,7 +1,7 @@
 #pragma once
 #include "pipeline.h"
 #include "memory.h"
-extern unsigned x[], pc;
+extern unsigned x[], pc, locked[];
 class pipeline5 : public pipeline
 {
 public:
@@ -154,10 +154,23 @@ public:
 		}
 	}
 
+	void unlock_register()
+	{
+		switch (type)
+		{
+		case R:	case I:	case U:	case J:
+			locked[rd]--;
+			break;
+		default: // no rd
+			break;
+		}
+	}
+
 	void run(pipeline *next_ppl)
 	{
 		if (!is_empty(next_ppl) || is_empty(this)) return;
 		execute();
+		unlock_register(); // hazard : unlock the rd register
 		pass(next_ppl);
 	}
 };

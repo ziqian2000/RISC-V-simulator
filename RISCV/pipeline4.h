@@ -1,7 +1,7 @@
 #pragma once
 #include "pipeline.h"
 #include "memory.h"
-extern unsigned pc;
+extern unsigned pc, pc_lock;
 class pipeline4 : public pipeline
 {
 public:
@@ -151,11 +151,17 @@ public:
 			break;
 		}
 	}
+	void unlock_pc()
+	{
+		if (opcode == 0b1101111 || opcode == 0b1100111 || opcode == 0b1100011) // JAL, JALR, B**
+			pc_lock--;
+	}
 
 	void run(pipeline *next_ppl)
 	{
 		if (!is_empty(next_ppl) || is_empty(this)) return;
 		execute();
+		unlock_pc(); // hazard : unlock pc
 		pass(next_ppl);
 	}
 };

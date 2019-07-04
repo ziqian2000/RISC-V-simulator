@@ -2,7 +2,7 @@
 #include "tools.h"
 #include "pipeline.h"
 
-extern unsigned x[];
+extern unsigned x[], locked[];
 
 class pipeline2 : public pipeline
 {
@@ -109,15 +109,17 @@ public:
 		}
 	}
 
-	void register_fetch()
+	bool register_fetch()
 	{
 		switch (type)
 		{
 		case R: case S: case B:
+			//if (locked[rs2] || locked[rs1]) return false;
 			rs2 = x[rs2];
 			rs1 = x[rs1];
 			break;
 		case I:
+			//if (locked[rs1]) return false;
 			rs1 = x[rs1];
 			break;
 		case U: case J:
@@ -126,6 +128,25 @@ public:
 			throw "error in regiter fetch";
 			break;
 		}
+		return true;
+	}
+	
+	void lock_register()
+	{
+		switch (type)
+		{
+		case R:	case I:	case U:	case J:
+			locked[rd]++;
+			break;
+		default: // no rd
+			break;
+		}
+	}
+
+	void lock_pc()
+	{
+		if (opcode == 0b1101111 || opcode == 0b1100111 || opcode == 0b1100011) // JAL, JALR, B**
+			pc_lock++;
 	}
 
 	void run(pipeline *next_ppl)
@@ -134,7 +155,9 @@ public:
 		get_type();
 		decode_all();
 		sign_extend();
-		register_fetch();
+		if (!register_fetch()) { return; } // hazard : unable to fetch the locked registers
+		lock_register(); // hazard : lock the rd register
+		lock_pc(); // hazard : lock pc
 		pass(next_ppl);
 	}
 };
