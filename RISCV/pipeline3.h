@@ -1,9 +1,10 @@
 #pragma once
 #include "pipeline.h"
+extern unsigned pc_lock;
 class pipeline3 : public pipeline
 {
 public:
-	void execute()
+	void execute(pipeline *prev_ppl)
 	{
 		switch (opcode)
 		{
@@ -19,7 +20,7 @@ public:
 			(imm >>= 1) <<= 1;
 			break;
 		case 0b1100011: // ...
-			imm -= 4;
+			// imm -= 4;
 			switch (func3)
 			{
 			case 0b000: // BEQ
@@ -40,6 +41,11 @@ public:
 			case 0b111: // BGEU
 				rs1 = rs1 >= rs2 ? 1 : 0;
 				break;
+			}
+			if (rs1 != imm) // incorrect prediction
+			{
+				prev_ppl->empty = true;
+				pc_lock++;
 			}
 			break;
 		case 0b0000011: // ...
@@ -155,10 +161,10 @@ public:
 		}
 	}
 
-	void run(pipeline *next_ppl)
+	void run(pipeline *next_ppl, pipeline *prev_ppl)
 	{
 		if (!is_empty(next_ppl) || is_empty(this)) return;
-		execute();
+		execute(prev_ppl);
 		pass(next_ppl);
 	}
 };

@@ -27,8 +27,6 @@ public:
 		return *this;
 	}
 
-	virtual void run(pipeline *that) = 0;
-
 	bool is_empty(pipeline *ppl) {return ppl != nullptr ? ppl->empty : true; }
 
 	/* assuming that next_ppl is empty */

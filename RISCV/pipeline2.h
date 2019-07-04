@@ -3,6 +3,7 @@
 #include "pipeline.h"
 
 extern unsigned x[], locked[], pc_lock;
+extern unsigned branch_address[][2], branch_vis_time[];
 
 class pipeline2 : public pipeline
 {
@@ -145,8 +146,26 @@ public:
 
 	void lock_pc()
 	{
-		if (opcode == 0b1101111 || opcode == 0b1100111 || opcode == 0b1100011) // JAL, JALR, B**
+		if (opcode == 0b1101111 || opcode == 0b1100111) // JAL, JALR
 			pc_lock++;
+	}
+
+	/* only for 0b1100011 */
+	void branch_predictor()
+	{
+		if (opcode != 0b1100011) return;
+
+		unsigned ins_address = (pc - 4) >> 2;
+		if (branch_vis_time[ins_address] == 0)
+		{
+			branch_address[ins_address][0] = pc;
+			branch_address[ins_address][1] = pc - 4 + imm;
+		}
+		branch_vis_time[ins_address]++;
+
+		/* static predictor */
+		pc = branch_address[ins_address][imm = 0]; // the choice
+		rd = ins_address; // save the address
 	}
 
 	void run(pipeline *next_ppl)
@@ -158,6 +177,7 @@ public:
 		if (!register_fetch()) return;  // hazard : unable to fetch the locked registers
 		lock_register(); // hazard : lock the rd register
 		lock_pc(); // hazard : lock pc
+		branch_predictor();
 		pass(next_ppl);
 	}
 };

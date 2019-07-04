@@ -2,6 +2,7 @@
 #include "pipeline.h"
 #include "memory.h"
 extern unsigned pc, pc_lock;
+extern unsigned branch_address[][2];
 class pipeline4 : public pipeline
 {
 public:
@@ -32,23 +33,22 @@ public:
 			switch (func3)
 			{
 			case 0b000: // BEQ
-				rs1 ? pc += imm : 0;
 				break;
 			case 0b001: // BNE
-				rs1 ? pc += imm : 0;
 				break;
 			case 0b100: // BLT
-				rs1 ? pc += imm : 0;
 				break;
 			case 0b101: // BGE
-				rs1 ? pc += imm : 0;
 				break;
 			case 0b110: // BLTU
-				rs1 ? pc += imm : 0;
 				break;
 			case 0b111: // BGEU
-				rs1 ? pc += imm : 0;
 				break;
+			}
+			if (rs1 != imm) // incorrect prediction
+			{
+				pc = branch_address[rd][rs1];
+				pc_lock--;
 			}
 			break;
 		case 0b0000011: // ...
@@ -153,7 +153,7 @@ public:
 	}
 	void unlock_pc()
 	{
-		if (opcode == 0b1101111 || opcode == 0b1100111 || opcode == 0b1100011) // JAL, JALR, B**
+		if (opcode == 0b1101111 || opcode == 0b1100111) // JAL, JALR
 			pc_lock--;
 	}
 

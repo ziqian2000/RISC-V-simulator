@@ -12,9 +12,12 @@ unsigned x[32], pc; // user-visible registers
 
 unsigned locked[32], pc_lock; // deal with hazard
 
+unsigned branch_address[0x20005 >> 2][2]; // the two addresses some branch may take, 0 for not taken, 1 for taken
+unsigned branch_vis_time[0x20005 >> 2]; // the time some branch is visited
+
 int main()
 {
-	//freopen("sample/basicopt1.data", "r", stdin);
+	//freopen("sample/array_test1.data", "r", stdin);
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();
@@ -25,9 +28,8 @@ int main()
 	{
 		ppl5->run(nullptr);
 		ppl4->run(ppl5);
-		ppl3->run(ppl4);
+		ppl3->run(ppl4, ppl2);
 		ppl2->run(ppl3);
 		ppl1->run(ppl2);
-
 	}
 }
