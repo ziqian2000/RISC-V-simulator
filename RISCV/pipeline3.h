@@ -1,6 +1,9 @@
 #pragma once
 #include "pipeline.h"
 extern unsigned pc_lock;
+extern unsigned branch_history[], branch_vis_time[];
+extern unsigned branch_taken[][1 << 2][2];
+extern unsigned branch_tot_vis, branch_cor_vis;
 class pipeline3 : public pipeline
 {
 public:
@@ -42,10 +45,20 @@ public:
 				rs1 = rs1 >= rs2 ? 1 : 0;
 				break;
 			}
+
+			branch_tot_vis++;
+			if (branch_vis_time[rd] > STEP)
+				branch_taken[rd][branch_history[rd] & MASK][rs1]++;
+			(branch_history[rd] <<= 1) |= rs1;
+
 			if (rs1 != imm) // incorrect prediction
 			{
 				prev_ppl->empty = true;
 				pc_lock++;
+			}
+			else // correct prediction
+			{
+				branch_cor_vis++;
 			}
 			break;
 		case 0b0000011: // ...

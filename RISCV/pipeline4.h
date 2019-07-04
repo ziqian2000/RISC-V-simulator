@@ -3,6 +3,7 @@
 #include "memory.h"
 extern unsigned pc, pc_lock;
 extern unsigned branch_address[][2];
+extern unsigned branch_tot_vis, branch_cor_vis;
 class pipeline4 : public pipeline
 {
 public:
@@ -11,6 +12,7 @@ public:
 		if (ins == 0x00c68223)
 		{
 			printf("%d\n", ((unsigned)x[10]) & 255u);
+			printf("%lf\n", 1.0 * branch_cor_vis / branch_tot_vis);
 			//for (;;);
 			exit(0);
 		}

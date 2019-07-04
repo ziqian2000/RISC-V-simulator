@@ -4,6 +4,10 @@ class pipeline
 {
 public:
 
+	/* n-bit dynamic branch predictor */
+	const unsigned STEP = 2;
+	const unsigned MASK = (1 << STEP) - 1;
+
 	/*buffer*/
 	unsigned ins, rs1, rs2, rd, imm, func3, func7, opcode; 
 	bool empty;

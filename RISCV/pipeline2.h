@@ -3,7 +3,7 @@
 #include "pipeline.h"
 
 extern unsigned x[], locked[], pc_lock;
-extern unsigned branch_address[][2], branch_vis_time[];
+extern unsigned branch_address[][2], branch_vis_time[], branch_taken[][1 << 2][2], branch_history[];
 
 class pipeline2 : public pipeline
 {
@@ -151,7 +151,7 @@ public:
 	}
 
 	/* only for 0b1100011 */
-	void branch_predictor()
+	void static_branch_predictor()
 	{
 		if (opcode != 0b1100011) return;
 
@@ -163,9 +163,36 @@ public:
 		}
 		branch_vis_time[ins_address]++;
 
-		/* static predictor */
 		pc = branch_address[ins_address][imm = 0]; // the choice
 		rd = ins_address; // save the address
+	}
+
+	/* only for 0b1100011 */
+	void dynamic_branch_predictor()
+	{
+		if (opcode != 0b1100011) return;
+
+		unsigned ins_address = (pc - 4) >> 2;
+		if (branch_vis_time[ins_address] == 0) // init target address
+		{
+			branch_address[ins_address][0] = pc;
+			branch_address[ins_address][1] = pc - 4 + imm;
+		}
+
+		unsigned tmp0 = branch_taken[ins_address][branch_history[ins_address] & MASK][0];
+		unsigned tmp1 = branch_taken[ins_address][branch_history[ins_address] & MASK][1];
+		if (tmp0 || tmp1) // the history is not empty
+		{
+			unsigned choice = tmp0 > tmp1 ? 0 : 1;
+			pc = branch_address[ins_address][imm = choice]; // make choice
+		}
+		else
+		{
+			pc = branch_address[ins_address][imm = 0]; // make choice
+		}
+
+		rd = ins_address; // save the address into buffer
+		branch_vis_time[ins_address]++;
 	}
 
 	void run(pipeline *next_ppl)
@@ -177,7 +204,10 @@ public:
 		if (!register_fetch()) return;  // hazard : unable to fetch the locked registers
 		lock_register(); // hazard : lock the rd register
 		lock_pc(); // hazard : lock pc
-		branch_predictor();
+
+		//static_branch_predictor();
+		dynamic_branch_predictor();
+
 		pass(next_ppl);
 	}
 };
