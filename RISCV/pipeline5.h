@@ -170,7 +170,7 @@ public:
 	{
 		if (!is_empty(next_ppl) || is_empty(this)) return;
 		execute();
-		unlock_register(); // hazard : unlock the rd register
+		//unlock_register(); // hazard : unlock the rd register
 		pass(next_ppl);
 	}
 };

@@ -1,7 +1,5 @@
 #pragma once
 #include "pipeline.h"
-
-
 class pipeline3 : public pipeline
 {
 public:
