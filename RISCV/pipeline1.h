@@ -9,7 +9,8 @@ public:
 	{
 		if (pc_lock)
 			return false;
-		return true;
+		else
+			return true;
 	}
 	void run(pipeline *next_ppl)
 	{

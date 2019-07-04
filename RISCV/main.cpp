@@ -24,18 +24,11 @@ int main()
 	pipeline5 *ppl5 = new pipeline5();
 	while (true)
 	{
-		//printf("%x\n", pc);
-		//printf("0 : %d %d %d %d %d\n", ppl1->empty, ppl2->empty, ppl3->empty, ppl4->empty, ppl5->empty);
-		ppl1->run(ppl2);
-		//printf("1 : %d %d %d %d %d\n", ppl1->empty, ppl2->empty, ppl3->empty, ppl4->empty, ppl5->empty);
-		ppl2->run(ppl3);
-		//printf("2 : %d %d %d %d %d\n", ppl1->empty, ppl2->empty, ppl3->empty, ppl4->empty, ppl5->empty);
-		ppl3->run(ppl4);
-		//printf("3 : %d %d %d %d %d\n", ppl1->empty, ppl2->empty, ppl3->empty, ppl4->empty, ppl5->empty);
-		ppl4->run(ppl5);
-		//printf("4 : %d %d %d %d %d\n", ppl1->empty, ppl2->empty, ppl3->empty, ppl4->empty, ppl5->empty);
 		ppl5->run(nullptr);
-		//printf("5 : %d %d %d %d %d\n", ppl1->empty, ppl2->empty, ppl3->empty, ppl4->empty, ppl5->empty);
+		ppl4->run(ppl5);
+		ppl3->run(ppl4);
+		ppl2->run(ppl3);
+		ppl1->run(ppl2);
 
 	}
 }
