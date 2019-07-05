@@ -158,9 +158,17 @@ public:
 			pc_lock--;
 	}
 
+	bool do_triple_cycle()
+	{
+		if ((opcode == 0b0000011 || opcode == 0b0100011) && --func7) // L**, S**
+			return false;
+		return true;
+	}
+
 	void run(pipeline *next_ppl)
 	{
 		if (!is_empty(next_ppl) || is_empty(this)) return;
+		if (!do_triple_cycle()) return;
 		execute();
 		unlock_pc(); // hazard : unlock pc
 		pass(next_ppl);

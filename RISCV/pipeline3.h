@@ -174,10 +174,17 @@ public:
 		}
 	}
 
+	void make_triple_cycle()
+	{
+		if (opcode == 0b0000011 || opcode == 0b0100011) // L**, S**
+			func7 = 3;
+	}
+
 	void run(pipeline *next_ppl, pipeline *prev_ppl)
 	{
 		if (!is_empty(next_ppl) || is_empty(this)) return;
 		execute(prev_ppl);
+		make_triple_cycle();
 		pass(next_ppl);
 	}
 };
