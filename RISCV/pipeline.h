@@ -7,6 +7,7 @@ public:
 	/* n-bit dynamic branch predictor */
 	const unsigned STEP = 2;
 	const unsigned MASK = (1 << STEP) - 1;
+	const unsigned LEN = 2 * 2; // dynamic 2, automaton ranges from 1 to LEN
 
 	/* buffer with meaningless name */
 	unsigned ins, rs1, rs2, rd, imm, func3, func7, opcode; 

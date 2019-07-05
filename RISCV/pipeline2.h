@@ -3,7 +3,7 @@
 #include "pipeline.h"
 
 extern unsigned x[], locked[], pc_lock, pc;
-extern unsigned branch_address[][2], branch_vis_time[], branch_taken[][1 << 2][2], branch_history[];
+extern unsigned branch_address[][2], branch_vis_time[], branch_taken[][1 << 2][2], branch_taken2[][1 << 2], branch_history[];
 extern std::map<unsigned, unsigned> hash_table;
 extern unsigned timer;
 
@@ -152,7 +152,7 @@ public:
 			pc_lock++;
 	}
 
-	/* only for 0b1100011 */
+	/* static and useless */
 	void static_branch_predictor()
 	{
 		if (opcode != 0b1100011) return;
@@ -169,7 +169,7 @@ public:
 		rd = ins_address; // save the address
 	}
 
-	/* only for 0b1100011 */
+	/* two-level adaptive predictor (based on statistics) */
 	void dynamic_branch_predictor()
 	{
 		if (opcode != 0b1100011) return;
@@ -198,6 +198,34 @@ public:
 		branch_vis_time[ins_address]++;
 	}
 
+	/* two-level adaptive predictor (better, based on automaton) */
+	void dynamic_branch_predictor2()
+	{
+		if (opcode != 0b1100011) return;
+
+		unsigned ins_address = (pc - 4) >> 2;
+		ins_address = hash_table[ins_address] ? hash_table[ins_address] : (hash_table[ins_address] = ++timer);
+		if (branch_vis_time[ins_address] == 0) // init target address
+		{
+			branch_address[ins_address][0] = pc;
+			branch_address[ins_address][1] = pc - 4 + imm;
+		}
+
+		unsigned &tmp = branch_taken2[ins_address][branch_history[ins_address] & MASK];
+		if (tmp == 0) tmp = LEN >> 1 | 1; // init
+		if (tmp <= LEN >> 1) // not taken
+		{
+			pc = branch_address[ins_address][imm = 0]; // make choice
+		}
+		else // taken
+		{
+			pc = branch_address[ins_address][imm = 1]; // make choice
+		}
+
+		rd = ins_address; // save the address into buffer
+		branch_vis_time[ins_address]++;
+	}
+
 	void run(pipeline *next_ppl)
 	{
 		if (!is_empty(next_ppl) || is_empty(this)) return;
@@ -209,7 +237,8 @@ public:
 		lock_pc(); // hazard : lock pc
 
 		//static_branch_predictor();
-		dynamic_branch_predictor();
+		//dynamic_branch_predictor();
+		dynamic_branch_predictor2();
 
 		pass(next_ppl);
 	}

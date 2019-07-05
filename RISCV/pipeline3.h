@@ -2,7 +2,7 @@
 #include "pipeline.h"
 extern unsigned pc_lock;
 extern unsigned branch_history[], branch_vis_time[];
-extern unsigned branch_taken[][1 << 2][2];
+extern unsigned branch_taken[][1 << 2][2], branch_taken2[][1 << 2];
 extern unsigned branch_tot_vis, branch_cor_vis;
 extern std::map<unsigned, unsigned> hash_table;
 class pipeline3 : public pipeline
@@ -47,9 +47,16 @@ public:
 				break;
 			}
 
-			branch_tot_vis++;
-			if (branch_vis_time[rd] > STEP)
-				branch_taken[rd][branch_history[rd] & MASK][rs1]++;
+			branch_tot_vis++; // dynamic 1
+			if (branch_vis_time[rd] > STEP) // dynamic 1
+				branch_taken[rd][branch_history[rd] & MASK][rs1]++; // dynamic 1
+
+			{ // add a brace to avoid CE
+				unsigned &tmp = (branch_taken2[rd][branch_history[rd] & MASK] += rs1 ? 1 : -1); // dynamic 2
+				if (tmp < 1) tmp = 1; // dynamic 2
+				if (tmp > LEN) tmp = LEN; // dynamic 2
+			}
+
 			(branch_history[rd] <<= 1) |= rs1;
 
 			if (rs1 != imm) // incorrect prediction

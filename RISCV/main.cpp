@@ -6,7 +6,7 @@
  *		调用show_pipeline()展示每一次流水中各阶段的占用情况（main）
  *		使用pipeline类的成员函数show_buffer展示流水中的内容（main）
  *		解释分支预测并展示代码（pipeline2，pipeline3）
- *
+ *		绝大多数情况下，dynamic2表现不错，特别是basicopt1和superloop
  */
 
 #pragma warning(disable:4996)
@@ -28,6 +28,7 @@ unsigned branch_address[0x20005 >> 2][2]; // the two addresses some branch may t
 unsigned branch_vis_time[0x20005 >> 2]; // the time some branch is visited
 unsigned branch_history[0x20005 >> 2]; // the history of some branch, 0 for not taken, 1 for taken
 unsigned branch_taken[0x20005 >> 2][1 << 2][2]; // the times some branch is taken or not
+unsigned branch_taken2[0x20005 >> 2][1 << 2]; // the state of the automaton of some branch
 unsigned branch_tot_vis, branch_cor_vis; // the number of times branches are visited (correctly)
 
 std::map<unsigned, unsigned> hash_table; // hash_table in branch_predictor
@@ -43,7 +44,7 @@ void show_pipeline(int id, pipeline *ppl1, pipeline *ppl2, pipeline *ppl3, pipel
 
 int main()
 {
-	//freopen("sample/expr.data", "r", stdin);
+	//freopen("sample/superloop.data", "r", stdin);
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();
