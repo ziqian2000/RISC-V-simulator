@@ -2,8 +2,10 @@
 #include "tools.h"
 #include "pipeline.h"
 
-extern unsigned x[], locked[], pc_lock;
+extern unsigned x[], locked[], pc_lock, pc;
 extern unsigned branch_address[][2], branch_vis_time[], branch_taken[][1 << 2][2], branch_history[];
+extern std::map<unsigned, unsigned> hash_table;
+extern unsigned timer;
 
 class pipeline2 : public pipeline
 {
@@ -173,6 +175,7 @@ public:
 		if (opcode != 0b1100011) return;
 
 		unsigned ins_address = (pc - 4) >> 2;
+		ins_address = hash_table[ins_address] ? hash_table[ins_address] : (hash_table[ins_address] = ++timer);
 		if (branch_vis_time[ins_address] == 0) // init target address
 		{
 			branch_address[ins_address][0] = pc;

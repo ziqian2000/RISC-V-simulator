@@ -4,6 +4,7 @@ extern unsigned pc_lock;
 extern unsigned branch_history[], branch_vis_time[];
 extern unsigned branch_taken[][1 << 2][2];
 extern unsigned branch_tot_vis, branch_cor_vis;
+extern std::map<unsigned, unsigned> hash_table;
 class pipeline3 : public pipeline
 {
 public:

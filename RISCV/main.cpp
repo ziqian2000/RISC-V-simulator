@@ -1,4 +1,5 @@
 #pragma warning(disable:4996)
+#include <map>
 #include "stdc++.h"
 #include "memory.h"
 #include "pipeline1.h"
@@ -12,15 +13,18 @@ unsigned x[32], pc; // user-visible registers
 
 unsigned locked[32], pc_lock; // deal with hazard
 
-unsigned branch_address[0x20005 >> 2][2]; // the two addresses some branch may take, 0 for not taken, 1 for taken
-unsigned branch_vis_time[0x20005 >> 2]; // the time some branch is visited
-unsigned branch_history[0x20005 >> 2]; // the history of some branch, 0 for not taken, 1 for taken
-unsigned branch_taken[0x20005 >> 2][1 << 2][2]; // the times some branch is taken or not
+unsigned branch_address[0x20005 >> 3][2]; // the two addresses some branch may take, 0 for not taken, 1 for taken
+unsigned branch_vis_time[0x20005 >> 3]; // the time some branch is visited
+unsigned branch_history[0x20005 >> 3]; // the history of some branch, 0 for not taken, 1 for taken
+unsigned branch_taken[0x20005 >> 3][1 << 2][2]; // the times some branch is taken or not
 unsigned branch_tot_vis, branch_cor_vis; // the number of times branches are visited (correctly)
+
+std::map<unsigned, unsigned> hash_table; // hash_table in branch_predictor
+unsigned timer;
 
 int main()
 {
-	//freopen("sample/basicopt1.data", "r", stdin);
+	freopen("sample/expr.data", "r", stdin);
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();
