@@ -204,7 +204,7 @@ public:
 		if (opcode != 0b1100011) return;
 
 		unsigned ins_address = (pc - 4) >> 2;
-		ins_address = hash_table[ins_address] ? hash_table[ins_address] : (hash_table[ins_address] = ++timer);
+		//ins_address = hash_table[ins_address] ? hash_table[ins_address] : (hash_table[ins_address] = ++timer);
 		if (branch_vis_time[ins_address] == 0) // init target address
 		{
 			branch_address[ins_address][0] = pc;
