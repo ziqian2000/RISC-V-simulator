@@ -24,7 +24,7 @@ unsigned timer;
 
 int main()
 {
-	freopen("sample/expr.data", "r", stdin);
+	//freopen("sample/expr.data", "r", stdin);
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();
