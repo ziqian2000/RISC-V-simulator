@@ -8,7 +8,7 @@ public:
 	const unsigned STEP = 2;
 	const unsigned MASK = (1 << STEP) - 1;
 
-	/*buffer*/
+	/* buffer with meaningless name */
 	unsigned ins, rs1, rs2, rd, imm, func3, func7, opcode; 
 	bool empty;
 	TYPE type;
@@ -16,7 +16,8 @@ public:
 	pipeline() { empty = true; }
 	~pipeline() {}
 
-	pipeline &operator = (const pipeline &that) 
+	/* because the constant variables STEP and MASK, the default operator "=" is deleted */
+	pipeline &operator = (const pipeline &that)
 	{
 		ins = that.ins;
 		rs1 = that.rs1;
@@ -43,4 +44,11 @@ public:
 		}
 		empty = true;
 	}
+
+	void show_buffer()
+	{
+		printf("ins = %2X\trs1 = %2X\trs2 = %2X\trd = %2X\timm = %2X\tfunc3 = %2X\tfunc7 = %2X\topcode = %2X\tempty = %d\ttype = %d\n",
+			ins, rs1, rs2, rd, imm, func3, func7, opcode, empty, type);
+	}
+
 };
