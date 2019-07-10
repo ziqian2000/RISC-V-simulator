@@ -24,15 +24,14 @@ unsigned x[32], pc; // user-visible registers
 
 unsigned locked[32], pc_lock; // deal with hazard
 
-unsigned branch_address[0x20005 >> 2][2]; // the two addresses some branch may take, 0 for not taken, 1 for taken
-unsigned branch_vis_time[0x20005 >> 2]; // the time some branch is visited
-unsigned branch_history[0x20005 >> 2]; // the history of some branch, 0 for not taken, 1 for taken
-unsigned branch_taken[0x20005 >> 2][1 << 2][2]; // the times some branch is taken or not
-unsigned branch_taken2[0x20005 >> 2][1 << 2]; // the state of the automaton of some branch
-unsigned branch_tot_vis, branch_cor_vis; // the number of times branches are visited (correctly)
+const unsigned _S = 1 << 13, _M = _S - 1; // 8191 is a prime
 
-std::map<unsigned, unsigned> hash_table; // hash_table in branch_predictor
-unsigned timer;
+unsigned branch_address[_S][2]; // the two addresses some branch may take, 0 for not taken, 1 for taken
+unsigned branch_vis_time[_S]; // the time some branch is visited
+unsigned branch_history[_S]; // the history of some branch, 0 for not taken, 1 for taken
+unsigned branch_taken[_S][1 << 2][2]; // the times some branch is taken or not
+unsigned branch_taken2[_S][1 << 2]; // the state of the automaton of some branch
+unsigned branch_tot_vis, branch_cor_vis; // the number of times branches are visited (correctly)
 
 /* show the state of all pipelines */
 int show_id;
@@ -44,7 +43,7 @@ void show_pipeline(int id, pipeline *ppl1, pipeline *ppl2, pipeline *ppl3, pipel
 
 int main()
 {
-	//freopen("sample/superloop.data", "r", stdin);
+	freopen("sample/superloop.data", "r", stdin);
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();
