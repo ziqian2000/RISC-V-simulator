@@ -24,7 +24,7 @@ unsigned x[32], pc; // user-visible registers
 
 unsigned locked[32], pc_lock; // deal with hazard
 
-const unsigned _S = 1 << 13, _M = _S - 1; // 8191 is a prime
+const unsigned _S = 1 << 13, _M = _S - 1; // 8191 is a prime so we can use bitwise 'and'
 
 unsigned branch_address[_S][2]; // the two addresses some branch may take, 0 for not taken, 1 for taken
 unsigned branch_vis_time[_S]; // the time some branch is visited
@@ -43,7 +43,7 @@ void show_pipeline(int id, pipeline *ppl1, pipeline *ppl2, pipeline *ppl3, pipel
 
 int main()
 {
-	freopen("sample/superloop.data", "r", stdin);
+	//freopen("sample/basicopt1.data", "r", stdin);
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();
