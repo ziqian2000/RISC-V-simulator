@@ -47,11 +47,14 @@ public:
 				break;
 			}
 
-			branch_tot_vis++; // dynamic 1
+			branch_tot_vis++;
+
+			/*
 			if (branch_vis_time[rd] > STEP) // dynamic 1
 				branch_taken[rd][branch_history[rd] & MASK][rs1]++; // dynamic 1
+			*/
 
-			{ // add a brace to avoid CE
+			{ // add braces to avoid CE
 				unsigned &tmp = (branch_taken2[rd][branch_history[rd] & MASK] += rs1 ? 1 : -1); // dynamic 2
 				if (tmp < 1) tmp = 1; // dynamic 2
 				if (tmp > LEN) tmp = LEN; // dynamic 2

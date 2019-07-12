@@ -1,14 +1,3 @@
-
-/**
- *
- * 如何展示这份代码：
- *		解释五级流水
- *		调用show_pipeline()展示每一次流水中各阶段的占用情况（main）
- *		使用pipeline类的成员函数show_buffer展示流水中的内容（main）
- *		解释分支预测并展示代码（pipeline2，pipeline3）
- *		绝大多数情况下，dynamic2表现不错，特别是basicopt1和superloop
- */
-
 #pragma warning(disable:4996)
 #include <map>
 #include "stdc++.h"
@@ -29,8 +18,9 @@ const unsigned _S = 1 << 13, _M = _S - 1; // 8191 is a prime so we can use bitwi
 unsigned branch_address[_S][2]; // the two addresses some branch may take, 0 for not taken, 1 for taken
 unsigned branch_vis_time[_S]; // the time some branch is visited
 unsigned branch_history[_S]; // the history of some branch, 0 for not taken, 1 for taken
-unsigned branch_taken[_S][1 << 2][2]; // the times some branch is taken or not
 unsigned branch_taken2[_S][1 << 2]; // the state of the automaton of some branch
+/* not used */ unsigned branch_taken[_S][1 << 2][2]; // the times some branch is taken or not
+
 unsigned branch_tot_vis, branch_cor_vis; // the number of times branches are visited (correctly)
 
 /* show the state of all pipelines */
@@ -44,6 +34,8 @@ void show_pipeline(int id, pipeline *ppl1, pipeline *ppl2, pipeline *ppl3, pipel
 int main()
 {
 	//freopen("sample/basicopt1.data", "r", stdin);
+	//freopen("sample/superloop.data", "r", stdin);
+
 	memory::init_mem();
 	pipeline1 *ppl1 = new pipeline1();
 	pipeline2 *ppl2 = new pipeline2();
@@ -63,7 +55,7 @@ int main()
 		ppl1->run(ppl2);
 		//show_pipeline(++show_id, ppl1, ppl2, ppl3, ppl4, ppl5);
 
-		//if (!ppl3->empty)ppl3->show_buffer();
+		// if (!ppl3->empty)ppl3->show_buffer();
 
 	}
 }
